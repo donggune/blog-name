@@ -5,6 +5,21 @@ import { useMDXComponent } from "next-contentlayer/hooks";
 import { format, parseISO } from "date-fns";
 import type { MDXComponents } from "mdx/types";
 
+export async function generateMetadata({ params: { slug } }: { params: { slug: string } }) {
+  const post = allPosts.find((post) => post._raw.flattenedPath === slug);
+  if (!post) notFound();
+
+  return {
+    title: post.title,
+    openGraph: {
+      title: post.title,
+      type: "article",
+      publishedTime: post.date,
+      authors: ["name"],
+    },
+  };
+}
+
 const mdxComponents: MDXComponents = {
   a: ({ href, children }) => <Link href={href as string}>{children}</Link>,
 };
